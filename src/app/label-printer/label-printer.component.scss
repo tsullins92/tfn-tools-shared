@@ -1,0 +1,85 @@
+.sidebar {
+	border-right: solid;
+	height: 100%;
+	min-height: 5000px;
+	display: block;
+
+	color: black;
+	font-size: 1em;
+
+	h1 {
+		color: black;
+		font-weight: 100;
+		text-transform: uppercase;
+		display: block;
+		margin: 0;
+		padding: 7px;
+
+		strong {
+		font-weight: 700;
+	}
+
+		small {
+			font-size: 0.6em;
+			line-height: 0.6em;
+
+			&.subtitle {
+				display: block;
+			}
+		}
+	}
+
+
+	h3 {
+		padding: 0;
+		margin: 10px 0 0 0;
+		text-transform: uppercase;
+		color: black;
+		user-select: none;
+		font-size: 1.3em;
+
+	a {
+		color: black;
+		text-decoration: none;
+	}
+	}
+}
+
+.labelView{
+	margin: 1rem;
+	height: 0;
+}
+
+.barcode{
+    position: absolute;
+    bottom: 25%;
+    right: 82%;
+    width: 17%;
+		margin-top: 2rem;	
+}
+
+.made-date{
+    position: absolute;
+    bottom: 15%;
+    right: 85%;
+    font-size: 1.5rem;
+}
+
+.exp-date{
+    position: absolute;
+    bottom: 0;
+    right: 85%;
+    font-size: 1.5rem;
+}
+
+.create-queue_btn{
+	height: 25%;
+}
+
+#upload_btn{
+	margin-top: -3.4rem;
+}
+
+#xl-btns_div{
+	margin-left: 1rem;
+}

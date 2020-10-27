@@ -1,0 +1,21 @@
+<div class="container main__container">
+	<div class="row">
+		<form class="col-12" (submit)="enterBarcode()" action="#">
+			<div class="input-group">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text">Scan</span>
+			  </div>
+			  <input [(ngModel)]="barcode" name="barcode__input" type="text" class="form-control" aria-label="Barcode entries">
+			</div>
+		</form>
+	</div>
+	<div class="col-12 row">
+		<p class="col-11">{{statusString}}</p>
+		<button type="button" class="col-1 btn btn-danger" (click)="clearEntries()">Clear</button>
+	</div>
+	<div class="col-12">
+		<ul class="list-group">
+		  <li *ngFor="let item of barcodes" class="list-group-item" [ngClass]="{'unique__li': item.repeat, 'repeat__li': !item.repeat}">{{item.value}}</li>
+		</ul>
+	</div>
+</div>

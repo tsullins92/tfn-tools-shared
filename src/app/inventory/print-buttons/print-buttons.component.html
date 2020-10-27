@@ -1,0 +1,105 @@
+<button type="button" class="btn btn-primary col-3 print__btn" data-toggle="modal" data-target="#printLabelsModal">
+  Print Labels
+</button>
+<button type="button" class="btn btn-primary col-3 print__btn" data-toggle="modal" data-target="#addPrinterModal">
+  Add Printer
+</button>
+<button type="button" class="btn btn-primary col-3 print__btn" data-toggle="modal" data-target="#deletePrinterModal">
+  Delete Printer
+</button>
+
+<!-- DELETE PRINTER MODAL -->
+<div class="modal fade" id="deletePrinterModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete Printer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<form>
+				  <div class="form-group">
+				    <label for="delete-printer-selector">Printer: </label>
+						<select class="form-control" [(ngModel)] = "selectedPrinterName" name="delete-printer-selector">
+						  <option *ngFor="let printer of printers" [value]="printer.name">{{printer.name}}</option>
+						</select>
+				  </div>
+				</form>
+      </div>
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-primary" (click)="deletePrinter()" data-dismiss="modal">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD PRINTER MODAL -->
+<div class="modal fade" id="addPrinterModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Printer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<form>
+				  <div class="form-group">
+				    <label for="newPrinterName">Name: </label>
+				    <input type="text" class="form-control" id="newPrinterName" name="new-printer-name" placeholder="Printer Name" [(ngModel)]="newPrinterName">
+				  </div>
+				  <div class="form-group">
+				    <label for="newPrinterIP">IP Address: </label>
+				    <input type="text" class="form-control" id="newPrinterIP" name="new-printer-name" placeholder="IP Address" [(ngModel)]="newPrinterIP">
+				  </div>
+				</form>
+      </div>
+      <div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="addPrinter()" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT LABELS MODAL -->
+<div class="modal fade" id="printLabelsModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Print Labels</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<form>
+				  <div class="form-group">
+				    <label for="item-selector">Item: </label>
+						<select class="form-control" [(ngModel)] = "printSelectedItems" name="item-selector" multiple>
+						  <option *ngFor="let item of inventoryItems" [value] = "item">{{item.item_name}}-{{item.item_number}}</option>
+						</select>
+				  </div>
+				  <div class="form-group">
+				    <label for="printer-selector">Printer: </label>
+						<select class="form-control" [(ngModel)] = "selectedPrinterName" name="printer-selector">
+						  <option *ngFor="let printer of printers" [value]="printer.name">{{printer.name}}</option>
+						</select>
+				  </div>
+				  <div class="form-group">
+				    <label for="label-quantity">Label Quantity: </label>
+				    <input type="number" class="form-control" id="labelInputQuantity" name="label-quantity" [(ngModel)]=labelQuantity>
+				  </div>
+					<button type="button" class="btn btn-primary" (click)="printLabels()">Print</button>
+				</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

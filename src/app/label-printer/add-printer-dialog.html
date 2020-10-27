@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Add Printer</h1>
+<div mat-dialog-content>
+  <p>Name:</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.name">
+  </mat-form-field>
+  <p>IP Address:</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.address">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancelClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Submit</button>
+</div>
+

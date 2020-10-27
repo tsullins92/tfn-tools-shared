@@ -1,0 +1,142 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary col-2 inventory__btn" data-toggle="modal" data-target="#newItemModal">
+  New Items
+</button>
+<button type="button" class="btn btn-primary col-2 inventory__btn" data-toggle="modal" data-target="#addItemsModal">
+  Add Items
+</button>
+<button type="button" class="btn btn-primary col-2 inventory__btn" data-toggle="modal" data-target="#editItemModal">
+  Edit Items
+</button>
+<button type="button" class="btn btn-primary col-2 inventory__btn" data-toggle="modal" data-target="#deleteItemModal">
+  Delete Items
+</button>
+
+<!-- DELETE ITEM MODAL -->
+<div class="modal fade" id="deleteItemModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete Item</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<form>
+				  <div class="form-group">
+				    <label for="delete-select-name">Item: </label>
+						<select class="form-control" [(ngModel)] = "deleteSelectedItems" name="delete-select-name" multiple>
+						  <option *ngFor="let item of inventoryItems" [value]="item">{{item.item_name}}-{{item.item_number}}</option>
+						</select>
+				  </div>
+					<button type="button" class="btn btn-primary" (click)="deleteItems()">Delete</button>
+				</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT ITEM MODAL -->
+<div class="modal fade" id="editItemModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Item</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<form>
+				  <div class="form-group">
+				    <label for="edit-select-name">Item: </label>
+						<select class="form-control" [(ngModel)] = "editSelectedName" name="edit-select-name" (change)="changeEditSelectedItem()">
+						  <option *ngFor="let item of getInventoryItems()">{{item.item_name}}</option>
+						</select>
+				  </div>
+				  <div class="form-group">
+				    <label for="edit-name">Edit Name: </label>
+				    <input type="text" class="form-control" id="editInputName" name="edit-name" [(ngModel)]=editItemName>
+				  </div>
+				</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="editItem()" data-dismiss="modal">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD ITEMS MODAL -->
+<div class="modal fade" id="addItemsModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Items</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<form>
+				  <div class="form-group">
+				    <label for="add-select-name">Item: </label>
+						<select class="form-control" [(ngModel)] = "addSelectedItemName" name="add-select-name">
+						  <option *ngFor="let item of getInventoryItems()" [value]="item.item_name">{{item.item_name}}</option>
+						</select>
+				  </div>
+				  <div class="form-group">
+				    <label for="addQuantityInput">Quantity: </label>
+				    <input type="number" class="form-control" id="addInputQuantity" name="addQuantityInput" placeholder="0" [(ngModel)]="addItemQuantity">
+				  </div>
+				</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="addItems()" data-dismiss="modal">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEW ITEM MODAL -->
+<div class="modal fade" id="newItemModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">New Item</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<form>
+				  <div class="form-group">
+				    <label for="inputName">Name: </label>
+				    <input type="text" class="form-control" id="newInputName" name="input-name" placeholder="Item Name" [(ngModel)]="newItemName">
+				  </div>
+				  <div class="form-group">
+				    <label for="inputQuantity">Quantity: </label>
+				    <input type="number" class="form-control" id="newInputQuantity" name="input-quantity" placeholder="0" [(ngModel)]="newItemQuantity">
+				  </div>
+				  <div class="form-group">
+				    <label for="printer-selector">Printer: </label>
+						<select class="form-control" [(ngModel)] = "selectedPrinterName" name="printer-selector">
+						  <option *ngFor="let printer of printers" [value]="printer.name">{{printer.name}}</option>
+						</select>
+				  </div>
+				  <button type="button" class="btn btn-primary" (click)="printLabels()">Print</button>
+				</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="newItem()" data-dismiss="modal">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

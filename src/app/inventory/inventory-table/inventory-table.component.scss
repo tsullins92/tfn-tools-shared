@@ -1,0 +1,23 @@
+#inv-table-component_div{
+	margin: 1rem;
+}
+
+#inv-table-btn-group_div{
+	padding: 0;
+}
+
+#inv-table-holding_div{
+	height:600px;
+}
+
+.inv_table{
+
+}
+
+table { 
+	table-layout: fixed; 
+}
+
+td {
+  width: calc(100%/6); 
+}

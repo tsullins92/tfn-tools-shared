@@ -1,0 +1,31 @@
+<div id='printQueue'>
+	<div class="modal-header">
+		<h4 class="modal-title">Add Print Job</h4>
+		<button type="button" class="close" aria-label="Close" (click)="close()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<div class = "row col-12 form-group">
+			<div class = "row col-12">
+				<label for = 'printQueueCount' class = "col-6">Labels in queue: </label>
+				<p name='printQueueCount' class="col-6">{{printQueueSize()}}</p>
+			</div>
+			<div class = "row col-12">
+				<label for = 'printJobTemplate' class = "col-6">Name:</label>
+				<select name = 'printJobTemplate' [(ngModel)] = "selectedTemplate" (change)="changeTemplate()" class='col-6 select-option'>
+					<option class='form-control col-6 option'  *ngFor="let template of templates" [value]="template">{{template}}</option>
+				</select>
+			</div>
+			<div class="row col-12" *ngFor="let lineText of templateLineTexts; let i=index; trackBy:trackByFn">
+				<label for = "'lineText'+i" class = "col-6">Line {{i+1}}:</label>
+				<input name = "'lineText'+i" class = "form-control col-6" type = "text" [(ngModel)] = "templateLineTexts[i]">
+			</div>
+			<button type="button" class="btn btn-outline-dark" (click)="addTemplate()">Add</button>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-outline-dark" (click)="save()">Save</button>
+	</div>
+</div>
+

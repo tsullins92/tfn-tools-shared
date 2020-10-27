@@ -1,0 +1,20 @@
+<div class="btn-group btn-group-toggle col-12" data-toggle="buttons">
+  <label class="btn btn-secondary col-3">
+    <input type="radio" name="options" autocomplete="off" (click)="activeButtons = 'invButtons'"> Inventory
+  </label>
+  <label class="btn btn-secondary col-3">
+    <input type="radio" name="options" autocomplete="off" (click)="activeButtons = 'printButtons'"> Labels
+  </label>
+  <label class="btn btn-secondary col-3">
+    <input type="radio" name="options" autocomplete="off" (click)="activeButtons = 'scanButtons'"> Scan
+  </label>  
+</div>
+<div class=col-6>
+	<app-inventory-buttons *ngIf="activeButtons == 'invButtons'" [inventoryItems]="inventoryItems"></app-inventory-buttons>
+	<app-print-buttons *ngIf="activeButtons == 'printButtons'" [inventoryItems]="inventoryItems"></app-print-buttons>
+	<app-scanner-buttons *ngIf="activeButtons == 'scanButtons'" [inventoryItems]="inventoryItems"></app-scanner-buttons>
+</div>
+
+<app-inventory-table [inventoryItems]="inventoryItems"></app-inventory-table>
+
+

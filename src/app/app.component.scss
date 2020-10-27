@@ -1,0 +1,11 @@
+.navbar{
+	padding:0;
+}
+
+.nav-link{
+	cursor:pointer;
+}:focus{
+	background-color: var(--light-focus-color); ;
+	outline: none;
+}
+
