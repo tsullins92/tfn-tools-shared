@@ -15,12 +15,14 @@ export class InventoryButtonsComponent implements OnInit {
   inventoryItemNames: any[];
 	newItemName: string = '';
 	newItemQuantity: number = 0;
+  newItemUnit: string = '';
 
   addSelectedItemName: any;
 	addItemQuantity: number = 0;
 
 	editSelectedName: string = "";
 	editItemName: string = "";
+  editItemUnit: string = "";
 
 	deleteSelectedItems: any[] = [];
 
@@ -35,6 +37,7 @@ export class InventoryButtonsComponent implements OnInit {
     if(this.inventoryItems.length>0){
       this.editSelectedName = this.inventoryItems[0].item_name;
       this.editItemName = this.inventoryItems[0].item_name;
+      this.editItemUnit = this.inventoryItems[0].unit;  
       this.addSelectedItemName = this.inventoryItems[0].item_name;
       this.deleteSelectedItems = [this.inventoryItems[0]];
     }
@@ -69,10 +72,10 @@ export class InventoryButtonsComponent implements OnInit {
   		alert("Must give item a name");
   		return;
   	}
-  	let selectedItem = this.inventoryItems.find((item)=>{return item.name == this.editSelectedName;});
   	let data = {
       "item_name": this.editSelectedName,
-  		"new_item_name": this.editItemName
+  		"new_item_name": this.editItemName,
+      "unit": this.editItemUnit
   	}
   	this.inventoryService.editInventory(data);
   }
@@ -83,7 +86,8 @@ export class InventoryButtonsComponent implements OnInit {
   }
 
   changeEditSelectedItem(){
-  	this.editItemName = this.inventoryItems.find((item)=>{return item.item_name == this.editSelectedName;}).item_name;
+  	this.editItemName = this.editSelectedName;
+    this.editItemUnit = this.inventoryItems.find((item)=>{return item.item_name.trim() == this.editSelectedName.trim();}).unit;
   }
 
   addItems(){
@@ -92,6 +96,7 @@ export class InventoryButtonsComponent implements OnInit {
       return;
     }
     let tempInvItem = this.inventoryItems.find((item)=>{return item.item_name == this.addSelectedItemName});
+    let tempItemUnit = tempInvItem.unit;
     let tempItemID = tempInvItem.item_id;
     let tempRFIDValue = tempInvItem.rfid_value;
     let newItemNumber = Math.max(...this.inventoryItems.filter((item)=>{return item.item_name==this.addSelectedItemName}).map((item)=>{return item.item_number})) + 1;
@@ -105,7 +110,8 @@ export class InventoryButtonsComponent implements OnInit {
         "item_name": this.addSelectedItemName,
         "item_id": tempItemID,
         "item_number": i,
-        "rfid_value": rfidValue
+        "rfid_value": rfidValue,
+        "unit": tempItemUnit
       });      
     }
     this.inventoryService.newInventory(data);
@@ -138,13 +144,14 @@ export class InventoryButtonsComponent implements OnInit {
         "item_name": this.newItemName,
         "item_id": newItemID,
         "item_number": i,
-        "rfid_value": rfidValue
+        "rfid_value": rfidValue,
+        "unit": this.newItemUnit
       });      
     }
   	this.inventoryService.newInventory(data);
   }
 
-  printLabels(){
+  printNewLabels(){
     if(this.newItemName.length == 0){
       alert("Must give item a name");
       return;
@@ -170,8 +177,8 @@ export class InventoryButtonsComponent implements OnInit {
       rfidValue = hexEncode(rfidValue); 
       let itemName = this.newItemName + "-" + i;
       zebraCommand += "^XA^CFD ^LH0,72^PR2,2,2^FS ^RS8,,,3^RFW,H,^FD"+rfidValue+
-      "^FS ^RZ"+labelPW+",E,L^FS^RZ"+labelPW+",A,L^FS ^BXN,5,200^FO10,5^FD"+itemName+
-      "^FS ^A0N,30,30^FO110,30^FD"+itemName+"^FS ^PQ1^XZ";
+      "^FS ^RZ"+labelPW+",E,L^FS^RZ"+labelPW+",A,L^FS ^BXN,5,200^FO10,5^FD"+rfidValue+
+      "^FS " + this.multilineZPL(itemName, 22) + "^PQ1^XZ";
     }
     var data = {
       ip_address: selectedPrinter.address,
@@ -179,6 +186,65 @@ export class InventoryButtonsComponent implements OnInit {
       zpl: zebraCommand
     }
     this.printersService.printLabels(data).subscribe();
+  }
+
+  printAddLabels(){
+    if(this.addSelectedItemName.length == 0){
+      alert("Must give item a name");
+      return;
+    }
+    if(this.addItemQuantity <= 0){
+      alert("Quantity must be greater than 0");
+      return;
+    }
+    let tempInvItem = this.inventoryItems.find((item)=>{return item.item_name == this.addSelectedItemName});
+    let tempItemUnit = tempInvItem.unit;
+    let tempItemID = tempInvItem.item_id;
+    let tempRFIDValue = tempInvItem.rfid_value;
+    let newItemNumber = Math.max(...this.inventoryItems.filter((item)=>{return item.item_name==this.addSelectedItemName}).map((item)=>{return item.item_number})) + 1;
+    let selectedPrinter = this.printers.find((printer)=>{return printer.name == this.selectedPrinterName});
+    let zebraCommand = "";
+    for(var i=newItemNumber; i < (newItemNumber + this.addItemQuantity); ++i){
+      let labelPW = Date.now().toString().slice(-8);
+      let rfidValue = tempItemID.toString()+"-"+i.toString();
+      rfidValue = 'Z'.repeat(12-rfidValue.length) + rfidValue;
+      rfidValue = hexEncode(rfidValue); 
+      let itemName = this.addSelectedItemName + "-" + i;
+      zebraCommand += "^XA^CFD ^LH0,72^PR2,2,2^FS ^RS8,,,3^RFW,H,^FD"+rfidValue+
+      "^FS ^RZ"+labelPW+",E,L^FS^RZ"+labelPW+",A,L^FS ^BXN,5,200^FO10,5^FD"+rfidValue+
+      "^FS " + this.multilineZPL(itemName, 22) + "^PQ1^XZ";
+    }
+    var data = {
+      ip_address: selectedPrinter.address,
+      port: selectedPrinter.port,
+      zpl: zebraCommand
+    }
+    console.log(data);
+    // this.printersService.printLabels(data).subscribe();
+  }  
+
+  multilineZPL(itemName: string, lineSize: number){
+    let words = itemName.split(" ");
+    let count = 0;
+    let lineIdx = 0;
+    let lines = [""];
+    let multiLine = "";
+    words.forEach((word)=>{
+      let tempWord = word+" ";
+      count += tempWord.length;
+      console.log(word, count);
+      if(count > lineSize){
+        ++lineIdx;
+        count = tempWord.length;
+        lines.push(tempWord);
+      } else{
+        lines[lineIdx] += tempWord;
+      }
+    })
+    lines.forEach((line, index)=>{
+      multiLine += "^A0N,30,30^FO120,"+(30+(index*25))+"^FD"+line+"^FS ";
+    })
+    return multiLine;
   }
 
 }

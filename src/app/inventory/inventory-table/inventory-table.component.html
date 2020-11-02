@@ -14,12 +14,14 @@
 		    <tr>
 		    	<th scope="col">Name</th>
 		      <th scope="col">Inventory Count</th>
+		      <th scope="col">Unit</th>
 		    </tr>
 		  </thead>
 		  <tbody>
 		    <tr *ngFor="let item of summarizeInventoryItems(); let i = index">
 		    	<td scope="row">{{item.item_name}}</td>
 		      <td scope="row">{{item.inv_count}}</td>
+		      <td scope="row">{{item.unit}}</td>
 		    </tr>
 		  </tbody>
 		</table>
@@ -31,6 +33,7 @@
 		      <th scope="col">Name</th>
 		      <th scope="col">Item ID</th>
 		      <th scope="col">Item Number</th>
+		      <th scope="col">Unit</th>
 		      <th scope="col">RFID Value</th>
 		      <th scope="col">Date Modified</th>
 		    </tr>
@@ -41,6 +44,7 @@
 		      <td scope="row">{{item.item_name}}</td>
 		      <td scope="row">{{item.item_id}}</td>
 		      <td scope="row">{{item.item_number}}</td>
+		      <td scope="row">{{item.unit}}</td>
 		      <td scope="row">{{item.rfid_value}}</td>
 		      <td scope="row">{{item.date_modified}}</td>
 		    </tr>

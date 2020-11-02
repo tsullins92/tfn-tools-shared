@@ -72,7 +72,33 @@ export class ScannerButtonsComponent implements OnInit {
   	}  	
   }
 
-  addAndRemoveItems(){
+  removeItems(){
+    let removeItems = {ids: []};
+    if(this.scanInputString.length == 0){
+      return;
+    }
+    let uniqueInput = this.uniqueInput();
+    //get items that need to be removed
+    uniqueInput.forEach((item)=>{
+      let asciiInput = hex2a(item); //convert reading hex string to ascii string
+      let itemID = /(?<=Z+)\d+(?=-)/g.exec(asciiInput);
+      let itemNumber = /(?<=Z+\d+-)\d+/g.exec(asciiInput);
+      let invItemIndex = this.inventoryItems.findIndex((invItem)=>{return invItem.item_id.toString() == itemID[0];}); //check if item_numbers are equal to eachother
+      if(invItemIndex != -1){
+        let itemName = this.inventoryItems[invItemIndex].item_name;
+        let rfidValue = item;
+        let itemIndex = this.inventoryItems.findIndex((item1)=>{return (item1.item_name == itemName)&&(item1.item_number == itemNumber)});
+        if(itemIndex != -1){
+          removeItems.ids.push(parseInt(itemID[0]));
+        }       
+      }
+    });
+    if(removeItems.ids.length>0){
+      this.inventoryService.deleteInventory(removeItems);
+    }   
+  }
+
+  updateItems(){
   	let addItems = {items: []};
   	let deleteItems = {ids: []};
   	if(this.scanInputString.length == 0){

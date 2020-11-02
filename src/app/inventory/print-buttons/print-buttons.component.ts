@@ -93,15 +93,40 @@ export class PrintButtonsComponent implements OnInit {
       let rfidValue = item.rfid_value;
       let itemName = item.item_name + "-" + item.item_number;
       zebraCommand += "^XA^CFD ^LH0,72^PR2,2,2^FS ^RS8,,,3^RFW,H,^FD"+rfidValue+
-      "^FS ^RZ"+labelPW+",E,L^FS^RZ"+labelPW+",A,L^FS ^BXN,5,200^FO10,5^FD"+itemName+
-      "^FS ^A0N,30,30^FO110,30^FD"+itemName+"^FS ^PQ"+this.labelQuantity+"^XZ";
+      "^FS ^RZ"+labelPW+",E,L^FS^RZ"+labelPW+",A,L^FS ^BXN,5,200^FO10,5^FD"+rfidValue+
+      "^FS " + this.multilineZPL(itemName, 22) + "^PQ"+this.labelQuantity+"^XZ";
     })
 		var data = {
 			ip_address: selectedPrinter.address,
 			port: selectedPrinter.port,
 			zpl: zebraCommand
 		}
+		// console.log(data);
 		this.printersService.printLabels(data).subscribe();
+  }
+
+  multilineZPL(itemName: string, lineSize: number){
+  	let words = itemName.split(" ");
+  	let count = 0;
+  	let lineIdx = 0;
+  	let lines = [""];
+  	let multiLine = "";
+  	words.forEach((word)=>{
+ 			let tempWord = word+" ";
+  		count += tempWord.length;
+  		console.log(word, count);
+  		if(count > lineSize){
+  			++lineIdx;
+  			count = tempWord.length;
+  			lines.push(tempWord);
+  		} else{
+  			lines[lineIdx] += tempWord;
+  		}
+  	})
+  	lines.forEach((line, index)=>{
+  		multiLine += "^A0N,30,30^FO120,"+(30+(index*25))+"^FD"+line+"^FS ";
+  	})
+  	return multiLine;
   }
 
 }

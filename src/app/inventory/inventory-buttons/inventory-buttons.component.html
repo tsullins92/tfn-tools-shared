@@ -62,6 +62,10 @@
 				    <label for="edit-name">Edit Name: </label>
 				    <input type="text" class="form-control" id="editInputName" name="edit-name" [(ngModel)]=editItemName>
 				  </div>
+          <div class="form-group">
+            <label for="editInputUnit">Unit: </label>
+            <input type="text" class="form-control" id="editInputUnit" name="edit-unit" [(ngModel)]=editItemUnit>
+          </div>
 				</form>
       </div>
       <div class="modal-footer">
@@ -94,6 +98,13 @@
 				    <label for="addQuantityInput">Quantity: </label>
 				    <input type="number" class="form-control" id="addInputQuantity" name="addQuantityInput" placeholder="0" [(ngModel)]="addItemQuantity">
 				  </div>
+          <div class="form-group">
+            <label for="addPrinterSelector">Printer: </label>
+            <select class="form-control" id="addPrinterSelector" [(ngModel)] = "selectedPrinterName" name="printer-selector">
+              <option *ngFor="let printer of printers" [value]="printer.name">{{printer.name}}</option>
+            </select>
+          </div>          
+          <button type="button" class="btn btn-primary" (click)="printAddLabels()">Print</button>
 				</form>
       </div>
       <div class="modal-footer">
@@ -117,20 +128,24 @@
       <div class="modal-body">
 				<form>
 				  <div class="form-group">
-				    <label for="inputName">Name: </label>
+				    <label for="newInputName">Name: </label>
 				    <input type="text" class="form-control" id="newInputName" name="input-name" placeholder="Item Name" [(ngModel)]="newItemName">
-				  </div>
+				  </div>        
 				  <div class="form-group">
-				    <label for="inputQuantity">Quantity: </label>
+				    <label for="newInputQuantity">Quantity: </label>
 				    <input type="number" class="form-control" id="newInputQuantity" name="input-quantity" placeholder="0" [(ngModel)]="newItemQuantity">
 				  </div>
+          <div class="form-group">
+            <label for="newInputUnit">Unit: </label>
+            <input type="text" class="form-control" id="newInputUnit" name="input-name" placeholder="Unit" [(ngModel)]="newItemUnit">
+          </div>  
 				  <div class="form-group">
-				    <label for="printer-selector">Printer: </label>
-						<select class="form-control" [(ngModel)] = "selectedPrinterName" name="printer-selector">
+				    <label for="newPrinterSelector">Printer: </label>
+						<select class="form-control" id="newPrinterSelector" [(ngModel)] = "selectedPrinterName" name="printer-selector">
 						  <option *ngFor="let printer of printers" [value]="printer.name">{{printer.name}}</option>
 						</select>
 				  </div>
-				  <button type="button" class="btn btn-primary" (click)="printLabels()">Print</button>
+				  <button type="button" class="btn btn-primary" (click)="printNewLabels()">Print</button>
 				</form>
       </div>
       <div class="modal-footer">

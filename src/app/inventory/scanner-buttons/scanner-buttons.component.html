@@ -38,8 +38,9 @@
 				</table>
       </div>
       <div id="scan-buttons_div" class="row">
+				<button type="button" class="btn btn-primary col-3 log__btn" (click)="updateItems()">Update</button>
 	      <button type="button" class="btn btn-primary col-3 log__btn" (click)="addItems()">Add</button>
-				<button type="button" class="btn btn-primary col-3 log__btn" (click)="addAndRemoveItems()">Add and Remove</button>
+      <button type="button" class="btn btn-primary col-3 log__btn" (click)="removeItems()">Remove</button>
 			</div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
