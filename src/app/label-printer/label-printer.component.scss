@@ -1,3 +1,7 @@
+input[type="file"] {
+    display: none;
+}
+
 .sidebar {
 	border-right: solid;
 	height: 100%;
@@ -76,7 +80,7 @@
 	height: 25%;
 }
 
-#upload_btn{
+#print-file_btn{
 	margin-top: -3.4rem;
 }
 

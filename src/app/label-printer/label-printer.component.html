@@ -33,8 +33,12 @@
 		</div>
 
 		<div id="xl-btns_div" class="row col-2">
-			<button type="button" class="btn btn-outline-secondary btn-block create-queue_btn col-12" (click)="importXL($event)">Select File</button>
-			<button type="button" id="upload_btn" class="btn btn-outline-secondary btn-block create-queue_btn col-12" (click)="uploadXL()">Upload</button>
+			<label for="file-upload" class="btn btn-outline-secondary btn-block create-queue_btn col-12">
+			    Select File
+			</label>
+			<input id="file-upload" type="file" (change)="importXL($event)"/>
+<!-- 			<button type="button" id="upload_btn" class="btn btn-outline-secondary btn-block create-queue_btn col-12" (click)="uploadXL()">Upload</button> -->
+			<button type="button" id="print-file_btn" class="btn btn-outline-secondary btn-block create-queue_btn col-12" (click)="printFile()">Print File</button>
 		</div>
 
 	</div>

@@ -6,6 +6,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { Observable,Subject,BehaviorSubject, interval } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
+import * as XLSX from 'xlsx';
 
 
 export interface DialogData {
@@ -54,6 +55,7 @@ export class LabelPrinterComponent implements OnInit {
 	movingRight: boolean = false;
 	movingLeft: boolean = false;
 	zebraCommand: string = "";
+	fileZebraCommand: string = "";
 	newPrinterName: string = "";
 	newPrinterIP: string = "";
 	quantity: number = 1;
@@ -532,16 +534,6 @@ export class LabelPrinterComponent implements OnInit {
 		});
 	}
 
-	randomTrueOrFalse(){
-		let tempRandom = Math.random();
-		if(tempRandom>0.5){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-
 	absoluteValue(x: number){
 		return Math.abs(x);
 	}
@@ -566,26 +558,60 @@ export class LabelPrinterComponent implements OnInit {
 		this.printQueue = [];
 	}
 
-  // importXL(event: any){
-  //   /* wire up file reader */
-  //   const target: DataTransfer = <DataTransfer>(event.target);
-  //   if (target.files.length !== 1) throw new Error('Cannot use multiple files');
-  //   const reader: FileReader = new FileReader();
-  //   reader.onload = (e: any) => {
-  //     /* read workbook */
-  //     const bstr: string = e.target.result;
-  //     const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
+  importXL(event: any){
+    /* wire up file reader */
+    const target: DataTransfer = <DataTransfer>(event.target);
+    if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      /* read workbook */
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
 
-  //     /* grab first sheet */
-  //     const wsname: string = wb.SheetNames[0];
-  //     const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+      /* grab first sheet */
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
-  //     /* save data */
-  //     this.uploadedData = <Array<Array<any>>>(XLSX.utils.sheet_to_json(ws, {header: 1}));
-  //   };
-  //   reader.readAsBinaryString(target.files[0]);
-  //   console.log(this.uploadedData);
-  // }	
+      /* save data */
+      this.uploadedData = <Array<Array<any>>>(XLSX.utils.sheet_to_json(ws, {header: 1}));
+      this.uploadXL();
+    };
+    reader.readAsBinaryString(target.files[0]);
+  }	
+
+  uploadXL(){
+  	this.fileZebraCommand = "";
+    if(this.uploadedData[0]!=null){
+      if(this.uploadedData[0].length>=5 && this.uploadedData[0][0]=="Construct"){
+      	this.labelTemplate="Potatoes";
+      	this.changeTemplate();
+      	for(var i=1;i<this.uploadedData.length;++i){
+      		console.log(this.uploadedData[i][0]);
+          if(this.uploadedData[i][0]!=null && this.uploadedData[i][0].toString().length > 1){
+          	let tempDate = new Date(((this.uploadedData[i][1]-(70*365.25)-1)*86400000)+18000000);
+          	this.text[0] = this.uploadedData[i][0];
+          	this.text[1] = this.uploadedData[i][2];
+          	this.text[2] = this.uploadedData[i][4];
+          	this.text[3] = tempDate.getMonth()+1 + "/" + tempDate.getDate() + "/" + tempDate.getFullYear();
+          	if(this.uploadedData[i][3] != null) this.text[1]+="-"+this.text[2];
+          	this.generateZebraString();
+          	this.fileZebraCommand += this.zebraCommand;           
+          }
+        }   
+      } else{alert("File must be a Potato labels.xlsx file.");}
+    } else{alert("Select something to upload.");}  
+  }
+
+  printFile(){
+		var tempPrinter = JSON.parse(this.selectedPrinter);
+		var data = {
+			ip_address: tempPrinter.address,
+			port: tempPrinter.port,
+			zpl: this.fileZebraCommand
+		}
+		this.printersService.printLabels(data).subscribe();  	
+  }
+
 
 }
 

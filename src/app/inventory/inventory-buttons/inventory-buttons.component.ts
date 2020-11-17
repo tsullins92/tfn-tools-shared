@@ -114,6 +114,7 @@ export class InventoryButtonsComponent implements OnInit {
         "unit": tempItemUnit
       });      
     }
+    console.log(data);
     this.inventoryService.newInventory(data);
   }
 
